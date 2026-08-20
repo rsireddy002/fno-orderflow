@@ -18,9 +18,15 @@ ENV_PATH = os.path.join(BASE_DIR, ".env")
 
 load_dotenv(ENV_PATH)
 
-UPSTOX_API_KEY = os.getenv("UPSTOX_API_KEY")
-UPSTOX_API_SECRET = os.getenv("UPSTOX_API_SECRET")
-UPSTOX_ACCESS_TOKEN = os.getenv("UPSTOX_ACCESS_TOKEN")
+try:
+    import streamlit as st
+    UPSTOX_API_KEY = st.secrets.get("UPSTOX_API_KEY", os.getenv("UPSTOX_API_KEY"))
+    UPSTOX_API_SECRET = st.secrets.get("UPSTOX_API_SECRET", os.getenv("UPSTOX_API_SECRET"))
+    UPSTOX_ACCESS_TOKEN = st.secrets.get("UPSTOX_ACCESS_TOKEN", os.getenv("UPSTOX_ACCESS_TOKEN"))
+except (ImportError, FileNotFoundError):
+    UPSTOX_API_KEY = os.getenv("UPSTOX_API_KEY")
+    UPSTOX_API_SECRET = os.getenv("UPSTOX_API_SECRET")
+    UPSTOX_ACCESS_TOKEN = os.getenv("UPSTOX_ACCESS_TOKEN")
 
 BASE_URL = "https://api.upstox.com/v3"
 
